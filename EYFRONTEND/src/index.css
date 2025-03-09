@@ -1,0 +1,75 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+html,body{
+  height: 100%;
+  width: 100%;
+}
+
+#color{
+   background-color: '#00bcd4' 
+}
+
+
+/* Custom scrollbar */
+.auction-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.auction-scroll-container::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+.auction-scroll-container::-webkit-scrollbar-thumb {
+  background: #dee2e6;
+  border-radius: 4px;
+}
+
+/* Card hover effect */
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* src/styles/ActiveBidCard.css */
+.active-bid-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.active-bid-card h3 {
+  margin: 0 0 10px;
+}
+
+.active-bid-card input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.active-bid-card button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.active-bid-card button:hover {
+  background-color: #0056b3;
+}
