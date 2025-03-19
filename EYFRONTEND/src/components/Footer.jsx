@@ -12,7 +12,7 @@ return (
                 <Link to="/about" className="hover:underline mx-2">
                     About
                 </Link>
-                <Link to="/contact" className="hover:underline mx-2">
+                <Link to="/Contact" className="hover:underline mx-2">
                     Contact
                 </Link>
                 <Link to="/privacy" className="hover:underline mx-2">

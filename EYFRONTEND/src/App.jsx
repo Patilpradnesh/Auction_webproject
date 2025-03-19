@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import About from "./pages/About";
 import Startpage from "./pages/Startpage";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Contact } from "./pages/contact";
 
 // Function to check authentication status
 const isAuthenticated = () => localStorage.getItem("isAuthenticated") === "true";
@@ -27,6 +28,7 @@ function App() {
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/about" element={<About />} />
+        <Route path="/Contact" element={<Contact/>}/>
 
         {/* Protected Routes (Require Sign-In) */}
         <Route path="/Home" element={<PrivateRoute element={<Home />} />} />

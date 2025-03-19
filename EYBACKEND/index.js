@@ -5,7 +5,7 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
-// ✅ Import Mongoose Models
+
 const User = require("./model/user");
 const Bid = require("./model/Bid");
 
@@ -13,32 +13,32 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
-// ✅ Check if .env is correctly loaded
+
 if (!MONGO_URI) {
-    console.error("❌ MONGO_URI is missing! Check your .env file.");
+    console.error("MONGO_URI is missing! Check your .env file.");
     process.exit(1);
 }
 
-// ✅ Connect to MongoDB Atlas
+// Connect to MongoDB Atlas
 mongoose
     .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("✅ MongoDB Connected Successfully"))
-    .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+    .then(() => console.log("MongoDB Connected Successfully"))
+    .catch((err) => console.error(" MongoDB Connection Error:", err));
 
 app.use(cors());
 app.use(express.json());
 
-// ✅ Home Route
+// Home Route
 app.get("/", (req, res) => {
     res.send("<h1>MongoDB Atlas Connected Successfully!</h1>");
 });
 
 
-// ==========================
-// ✅ USER AUTHENTICATION API
-// ==========================
 
-// ✅ GET all users
+// USER AUTHENTICATION API
+
+
+//  GET all users
 app.get("/users", async (req, res) => {
     try {
         const users = await User.find();
@@ -49,7 +49,7 @@ app.get("/users", async (req, res) => {
     }
 });
 
-// ✅ POST - Register User
+//  POST - Register User
 app.post(
     "/register",
     [
@@ -86,7 +86,7 @@ app.post(
     }
 );
 
-// ✅ POST - User Login
+//  POST - User Login
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -108,7 +108,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-// ✅ DELETE - Delete User
+//  DELETE - Delete User
 app.delete("/deleteuser/:id", async (req, res) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
@@ -121,11 +121,10 @@ app.delete("/deleteuser/:id", async (req, res) => {
     }
 });
 
-// ==========================
-// ✅ BIDDING SYSTEM API
-// ==========================
+//  BIDDING SYSTEM API
 
-// ✅ GET - Fetch All Active Bids
+
+// GET - Fetch All Active Bids
 app.get("/bids", async (req, res) => {
     try {
         const bids = await Bid.find().sort({ createdAt: -1 });
@@ -136,7 +135,7 @@ app.get("/bids", async (req, res) => {
     }
 });
 
-// ✅ POST - Create a New Bid with End Time
+//  POST - Create a New Bid with End Time
 app.post("/addbids", async (req, res) => {
     try {
         const { item, yourBid, leading, duration } = req.body;
@@ -160,7 +159,7 @@ app.post("/addbids", async (req, res) => {
 
 
 
-// ✅ DELETE - Remove a Bid
+//  DELETE - Remove a Bid
 app.delete("delbids/:id", async (req, res) => {
     try {
         const deletedBid = await Bid.findByIdAndDelete(req.params.id);
@@ -196,7 +195,7 @@ app.post("/place-bid", async (req, res) => {
   });
   
 
-// ✅ Start Server
+//  Start Server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
