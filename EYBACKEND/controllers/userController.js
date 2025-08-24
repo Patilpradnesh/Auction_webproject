@@ -55,7 +55,7 @@ const registerUser = async (req, res) => {
             message: "User registered successfully",
             user: {
                 id: newUser._id,
-                username: newUser.username,
+                username: newUser.name,
                 email: newUser.email,
                 role: newUser.role
             }
@@ -95,15 +95,15 @@ const loginUser = async (req, res) => {
 
         const token = jwt.sign(
             { id: user._id, isAdmin: user.role === "admin" },
-            process.env.JWT_SECRET || "fallback_secret_key",
+            process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
 
-        res.status(200).json({ 
-            token, 
+        res.status(200).json({
+            token,
             role: user.role,
             name: user.name,
-            isAdmin: user.role === "admin" 
+            isAdmin: user.role === "admin"
         });
     } catch (err) {
         console.error("Login error:", err.message);

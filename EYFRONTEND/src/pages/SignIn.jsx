@@ -27,6 +27,7 @@ const SignIn = () => {
       } else {
         setError(`Unauthorized access for ${role}s.`);
       }
+      navigate("/");
     } catch (err) {
       console.error("Login error:", err.message);
       setError("Invalid email or password. Please try again.");

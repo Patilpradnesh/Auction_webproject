@@ -32,7 +32,9 @@ const AdminRoute = ({ element }) => {
 function App() {
   return (
     <>
+    <div className="d-flex flex-column min-vh-100">
       <Navbar />
+      <main className="flex-grow-1">
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} /> {/* Ensure this renders the Home component */}
@@ -51,7 +53,9 @@ function App() {
         <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
         <Route path="/AuctionDetails" element={<PrivateRoute element={<AuctionDetails />} />} />
       </Routes>
+      </main>
       <Footer />
+      </div>
     </>
   );
 }
