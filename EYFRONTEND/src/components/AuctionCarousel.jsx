@@ -25,23 +25,117 @@ const AuctionCarousel = () => {
   ];
 
   return (
-    <div className="container mt-4">
-      <Carousel>
-        {auctionItems.map((item) => (
-          <Carousel.Item key={item.id}>
-            <img
-              className="d-block w-100 rounded img-fluid p-1"
-              src={item.url}
-              alt={item.title}
-              style={{ height: "400px", objectFit: "cover" }}
-            />
-            <Carousel.Caption className="bg-dark bg-opacity-50 p-2 rounded">
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-        ))}
-      </Carousel>
+    <div className="container-fluid px-0">
+      <div className="position-relative">
+        <Carousel 
+          indicators={true} 
+          controls={true}
+          interval={5000}
+          className="carousel-responsive"
+        >
+          {auctionItems.map((item) => (
+            <Carousel.Item key={item.id}>
+              <div className="position-relative">
+                <img
+                  className="d-block w-100"
+                  src={item.url}
+                  alt={item.title}
+                  style={{ 
+                    height: "300px",
+                    objectFit: "cover"
+                  }}
+                />
+                <div className="carousel-overlay position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-25"></div>
+              </div>
+              <Carousel.Caption className="position-absolute bottom-0 start-0 end-0 text-white p-3 p-md-4">
+                <div className="container">
+                  <div className="row justify-content-center">
+                    <div className="col-12 col-md-8 text-center">
+                      <h3 className="h4 h-md-3 fw-bold mb-2 text-shadow">{item.title}</h3>
+                      <p className="d-none d-sm-block mb-0 text-shadow">{item.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </div>
+      
+      <style jsx>{`
+        .carousel-responsive {
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-shadow {
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Mobile carousel adjustments */
+        @media (max-width: 575.98px) {
+          .carousel-responsive img {
+            height: 250px !important;
+          }
+          
+          .carousel-caption {
+            padding: 1rem !important;
+          }
+          
+          .carousel-caption h3 {
+            font-size: 1.2rem !important;
+          }
+        }
+        
+        /* Tablet carousel adjustments */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+          .carousel-responsive img {
+            height: 350px !important;
+          }
+        }
+        
+        /* Desktop carousel adjustments */
+        @media (min-width: 768px) {
+          .carousel-responsive img {
+            height: 400px !important;
+          }
+        }
+        
+        /* Large desktop carousel adjustments */
+        @media (min-width: 1200px) {
+          .carousel-responsive img {
+            height: 450px !important;
+          }
+        }
+        
+        /* Carousel controls responsive */
+        .carousel-control-prev,
+        .carousel-control-next {
+          width: 5%;
+        }
+        
+        @media (max-width: 767.98px) {
+          .carousel-control-prev,
+          .carousel-control-next {
+            width: 8%;
+          }
+        }
+        
+        /* Carousel indicators responsive */
+        .carousel-indicators {
+          margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 575.98px) {
+          .carousel-indicators {
+            margin-bottom: 0.5rem;
+          }
+          
+          .carousel-indicators [data-bs-target] {
+            width: 8px;
+            height: 8px;
+          }
+        }
+      `}</style>
     </div>
   );
 };

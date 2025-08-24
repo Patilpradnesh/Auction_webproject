@@ -1,0 +1,208 @@
+/* Global Responsive Styles for AuctionPro */
+
+/* Base responsive font sizing */
+html {
+  font-size: 16px;
+}
+
+/* Mobile First Approach */
+@media (max-width: 575.98px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  /* Mobile button adjustments */
+  .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Mobile card adjustments */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  /* Mobile table responsive */
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  /* Hide long text on mobile */
+  .d-mobile-none {
+    display: none !important;
+  }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .d-mobile-none {
+    display: block !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+  
+  .btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* Custom responsive utilities */
+.text-responsive {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+}
+
+.heading-responsive {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+/* Responsive spacing */
+.py-responsive {
+  padding-top: clamp(1rem, 3vw, 3rem);
+  padding-bottom: clamp(1rem, 3vw, 3rem);
+}
+
+.px-responsive {
+  padding-left: clamp(1rem, 3vw, 2rem);
+  padding-right: clamp(1rem, 3vw, 2rem);
+}
+
+/* Responsive images */
+.img-responsive {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Responsive navbar adjustments */
+.navbar-brand {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+.nav-link {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+/* Responsive form controls */
+.form-control, .form-select {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+/* Responsive modal */
+@media (max-width: 575.98px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+}
+
+/* Custom responsive grid */
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 576px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Responsive text truncation */
+.text-truncate-mobile {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .text-truncate-mobile {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: initial;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid;
+  }
+  
+  .btn {
+    border: 2px solid;
+  }
+}
+
+/* Focus improvements for accessibility */
+.btn:focus,
+.form-control:focus,
+.nav-link:focus {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}

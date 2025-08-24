@@ -28,18 +28,18 @@ const Home = () => {
   ];
 
   return (
-    <div className="container-fluid p-0">
+    <div className="container-fluid">
       <AuctionCarousel />
       
-      <div className="container py-5 text-center">
-        <h1 className="mb-4">Welcome to Our Auction Platform</h1>
-        <h2 className="mb-4">Auction Showcase</h2>
+      <div className="container py-3 py-md-5 text-center">
+        <h1 className="mb-3 mb-md-4 display-5 display-md-4">Welcome to Our Auction Platform</h1>
+        <h2 className="mb-3 mb-md-4 h3 h-md-2">Auction Showcase</h2>
 
-        {/* Centered Auction Cards with Horizontal Scroll */}
-        <div className="auction-wrapper">
-          <div className="auction-scroll-container">
-            {auctions.map((auction, index) => (
-              <div key={index} className="auction-card">
+        {/* Responsive Auction Cards Grid */}
+        <div className="row g-3 g-md-4">
+          {auctions.map((auction, index) => (
+            <div key={index} className="col-12 col-md-6 col-lg-4">
+              <div className="auction-card h-100">
                 <AuctionBox
                   status={auction.status}
                   title={auction.title}
@@ -48,48 +48,48 @@ const Home = () => {
                   imageUrl={auction.imageUrl}
                 />
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Custom Styles */}
+      {/* Custom Responsive Styles */}
       <style jsx>{`
-        .auction-wrapper {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-        }
-
-        .auction-scroll-container {
-          display: flex;
-          gap: 20px;
-          overflow-x: auto;
-          padding: 15px 0;
-          max-width: 80%;
-          justify-content: center;
-          scrollbar-width: thin;
-          scrollbar-color: #aaa transparent;
-        }
-
-        .auction-scroll-container::-webkit-scrollbar {
-          height: 6px;
-        }
-
-        .auction-scroll-container::-webkit-scrollbar-thumb {
-          background: #888;
-          border-radius: 10px;
-        }
-
         .auction-card {
-          flex: 0 0 auto;
-          width: 280px;
           transition: transform 0.3s ease-in-out;
+          height: 100%;
         }
 
         .auction-card:hover {
           transform: translateY(-5px);
+        }
+
+        /* Mobile First Responsive Design */
+        @media (max-width: 576px) {
+          .container {
+            padding-left: 15px;
+            padding-right: 15px;
+          }
+          
+          h1 {
+            font-size: 1.8rem;
+          }
+          
+          h2 {
+            font-size: 1.4rem;
+          }
+        }
+
+        @media (min-width: 768px) {
+          .auction-card:hover {
+            transform: translateY(-8px);
+          }
+        }
+
+        @media (min-width: 992px) {
+          .container {
+            max-width: 1140px;
+          }
         }
       `}</style>
     </div>

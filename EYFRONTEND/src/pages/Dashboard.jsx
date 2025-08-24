@@ -25,58 +25,72 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Container fluid className="py-4">
-      <h1 className="mb-4">Your Dashboard</h1>
+    <Container fluid className="py-3 py-md-4 px-3 px-md-4">
+      <Row className="mb-3 mb-md-4">
+        <Col>
+          <h1 className="h2 h-md-1 mb-0">Your Dashboard</h1>
+        </Col>
+      </Row>
 
       {/* Quick Stats */}
-      <Row className="mb-4">
-        <Col md={4}>
-          <Card className="shadow border">
-            <Card.Body>
-              <Card.Title>Active Bids</Card.Title>
-              <Card.Text className="fs-3 fw-bold">{activeBids.length}</Card.Text>
+      <Row className="g-3 g-md-4 mb-4 mb-md-5">
+        <Col xs={12} sm={6} lg={4}>
+          <Card className="shadow-sm border-0 h-100">
+            <Card.Body className="text-center">
+              <Card.Title className="h5 h-md-4 text-primary">Active Bids</Card.Title>
+              <Card.Text className="display-6 display-md-5 fw-bold text-success">{activeBids.length}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={4}>
-          <Card className="shadow border">
-            <Card.Body>
-              <Card.Title>Winning</Card.Title>
-              <Card.Text className="fs-3 fw-bold">
+        <Col xs={12} sm={6} lg={4}>
+          <Card className="shadow-sm border-0 h-100">
+            <Card.Body className="text-center">
+              <Card.Title className="h5 h-md-4 text-primary">Winning</Card.Title>
+              <Card.Text className="display-6 display-md-5 fw-bold text-warning">
                 {activeBids.filter((bid) => bid.leading).length}
               </Card.Text>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={4}>
-          <Card className="shadow border">
-            <Card.Body>
-              <Card.Title>Total Spent</Card.Title>
-              <Card.Text className="fs-3 fw-bold">
-                ${activeBids.reduce((total, bid) => total + parseFloat(bid.yourBid), 0)}
+        <Col xs={12} sm={6} lg={4}>
+          <Card className="shadow-sm border-0 h-100">
+            <Card.Body className="text-center">
+              <Card.Title className="h5 h-md-4 text-primary">Total Spent</Card.Title>
+              <Card.Text className="display-6 display-md-5 fw-bold text-info">
+                ${activeBids.reduce((total, bid) => total + bid.amount, 0).toLocaleString()}
               </Card.Text>
             </Card.Body>
           </Card>
         </Col>
       </Row>
-
       {/* Active Bids Section */}
-      <Card className="shadow border mb-4">
-        <Card.Header as="h2">Your Active Bids</Card.Header>
-        <Card.Body>
-          <Row>
-            {activeBids.length > 0 ? (
-              activeBids.map((bid) => (
-                <Col md={4} key={bid._id}>
-                  <ActiveBidCard bid={bid} />
-                </Col>
-              ))
-            ) : (
-              <p className="text-muted">No active bids found.</p>
-            )}
-          </Row>
-        </Card.Body>
-      </Card>
+      <Row>
+        <Col>
+          <Card className="shadow-sm border-0">
+            <Card.Header className="bg-primary text-white">
+              <h2 className="h4 h-md-3 mb-0">Your Active Bids</h2>
+            </Card.Header>
+            <Card.Body className="p-3 p-md-4">
+              <Row className="g-3 g-md-4">
+                {activeBids.length > 0 ? (
+                  activeBids.map((bid) => (
+                    <Col xs={12} sm={6} lg={4} key={bid._id}>
+                      <ActiveBidCard bid={bid} />
+                    </Col>
+                  ))
+                ) : (
+                  <Col xs={12}>
+                    <div className="text-center py-5">
+                      <p className="text-muted h5">No active bids found.</p>
+                      <p className="text-muted">Start bidding on auctions to see them here!</p>
+                    </div>
+                  </Col>
+                )}
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };

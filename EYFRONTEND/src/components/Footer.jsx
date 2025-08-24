@@ -2,30 +2,62 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-return (
-    <footer className="bg-dark text-white mt-4 ">
-        <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-lg font-semibold">AuctionPro</h2>
-            <p className="text-sm mt-2">The best place to bid and win!</p>
+  return (
+    <footer className="bg-dark text-white mt-4 py-4">
+      <div className="container">
+        <div className="row">
+          <div className="col-12 col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <h2 className="h4 fw-bold mb-2">AuctionPro</h2>
+            <p className="mb-0 text-light">The best place to bid and win!</p>
+          </div>
 
-            <div className="mt-2 flex justify-center space-x-6 text-sm">
-                <Link to="/about" className="hover:underline mx-2">
-                    About
-                </Link>
-                <Link to="/Contact" className="hover:underline mx-2">
-                    Contact
-                </Link>
-                <Link to="/privacy" className="hover:underline mx-2">
-                    Privacy Policy
-                </Link>
+          <div className="col-12 col-md-6">
+            <div className="d-flex flex-column flex-sm-row justify-content-md-end align-items-center gap-3">
+              <Link
+                to="/about"
+                className="text-light text-decoration-none hover-underline"
+              >
+                About
+              </Link>
+              <Link
+                to="/Contact"
+                className="text-light text-decoration-none hover-underline"
+              >
+                Contact
+              </Link>
+              <Link
+                to="/privacy"
+                className="text-light text-decoration-none hover-underline"
+              >
+                Privacy Policy
+              </Link>
             </div>
-
-            <div className="border-t mt-2 pt-2 text-sm">
-                &copy; {new Date().getFullYear()} AuctionPro. All Rights Reserved.
-            </div>
+          </div>
         </div>
+
+        <hr className="my-3 border-secondary" />
+
+        <div className="row">
+          <div className="col-12 text-center">
+            <p className="mb-0 small text-muted">
+              &copy; {new Date().getFullYear()} AuctionPro. All Rights Reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <style>{`.hover-underline:hover {
+                text-decoration: underline !important;
+                }
+            
+                @media (max-width: 576px) {
+                    .container {
+                        padding-left: 15px;
+                        padding-right: 15px;
+                    }
+            }`}</style>
     </footer>
-);
+  );
 };
 
 export default Footer;
