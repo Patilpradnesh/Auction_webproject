@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const AdminRegister = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-
+  const navigate = useNavigate();
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/register-admin", {
-        name,
+      const response = await axios.post("http://localhost:3000/api/users/register", {
+        username:name,
         email,
         password,
+        role:"admin"
       });
       setMessage(response.data.message);
+      navigate("/admin-login");
     } catch (error) {
       setMessage(error.response?.data?.message || "Registration failed");
     }

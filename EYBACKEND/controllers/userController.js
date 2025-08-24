@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
     }
 
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password,role } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -43,7 +43,8 @@ const registerUser = async (req, res) => {
         const newUser = new User({ 
             name: username, // Frontend sends 'username', we store as 'name'
             email, 
-            password: hashedPassword 
+            password: hashedPassword ,
+            role:role || 'user'
         });
         
         await newUser.save();
