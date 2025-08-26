@@ -29,7 +29,7 @@ const Navbar = () => {
       >
         <div className="container-fluid px-3">
           <Link className="navbar-brand text-dark fw-bold d-flex align-items-center" to={"/"}>
-            <img src="src/assets/react.svg" alt="Logo" style={{ width: "30px", height: "30px", marginRight: "8px" }} /> 
+            <img src="src/assets/logobid.svg" alt="Logo" style={{ width: "30px", height: "30px", marginRight: "8px" }} /> 
             <span className="d-none d-sm-inline">AUCTIONPRO</span>
             <span className="d-sm-none">AUCTION</span>
           </Link>
