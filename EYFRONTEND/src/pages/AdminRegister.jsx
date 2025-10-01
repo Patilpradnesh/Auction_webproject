@@ -17,7 +17,7 @@ const AdminRegister = () => {
         role:"admin"
       });
       setMessage(response.data.message);
-      navigate("/admin-login");
+      navigate("/SignIn");
     } catch (error) {
       setMessage(error.response?.data?.message || "Registration failed");
     }

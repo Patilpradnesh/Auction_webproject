@@ -9,7 +9,7 @@ import About from "./pages/About";
 import AdminDashboard from "./pages/AdminDashboard";
 import SignIn from "./pages/SignIn";
 import AdminRegister from "./pages/AdminRegister";
-import AdminLogin from "./pages/AdminLogin";
+
 import ErrorPage from "./pages/ErrorPage";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -44,7 +44,6 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/admin-register" element={<AdminRegister />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/*" element={<ErrorPage />} />
           {/* Admin Routes */}
           <Route
