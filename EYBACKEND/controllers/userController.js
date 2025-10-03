@@ -124,10 +124,49 @@ const deleteUser = async (req, res) => {
     }
 };
 
+// Fetch user bid history
+const getUserBidHistory = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).populate("bids");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({
+      status: "success",
+      data: user.bids,
+    });
+  } catch (err) {
+    console.error("Error fetching user bid history:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Fetch user profile
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching user profile:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Correctly export all functions
 module.exports = {
-    getAllUsers,
-    registerUser,
-    loginUser,
-    deleteUser,
+  getAllUsers,
+  registerUser,
+  loginUser,
+  deleteUser,
+  getUserBidHistory,
+  getUserProfile,
 };

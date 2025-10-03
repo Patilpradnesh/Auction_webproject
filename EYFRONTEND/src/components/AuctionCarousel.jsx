@@ -62,7 +62,7 @@ const AuctionCarousel = () => {
         </Carousel>
       </div>
       
-      <style jsx>{`
+      <style>{`
         .carousel-responsive {
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }

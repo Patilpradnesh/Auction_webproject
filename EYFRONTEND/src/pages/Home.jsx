@@ -54,7 +54,7 @@ const Home = () => {
       </div>
 
       {/* Custom Responsive Styles */}
-      <style jsx>{`
+      <style>{`
         .auction-card {
           transition: transform 0.3s ease-in-out;
           height: 100%;
