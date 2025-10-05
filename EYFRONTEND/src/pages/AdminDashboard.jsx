@@ -4,8 +4,12 @@ import axios from "axios";
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [bids, setBids] = useState([]);
-    const [item, setItem] = useState("");
-    const [startingBid, setStartingBid] = useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("Electronics");
+    const [startingPrice, setStartingPrice] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
     const [message, setMessage] = useState("");
 
     useEffect(() => {
@@ -15,7 +19,7 @@ const AdminDashboard = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("/admin/users", {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             setUsers(response.data);
@@ -26,7 +30,7 @@ const AdminDashboard = () => {
 
     const fetchBids = async () => {
         try {
-            const response = await axios.get("/admin/bids", {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/bids`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             console.log("Bids API Response:", response.data); // Add this log
@@ -49,7 +53,7 @@ const AdminDashboard = () => {
 
     const deleteUser = async (id) => {
         try {
-            await axios.delete(`/admin/users/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/users/${id}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             fetchUsers();
@@ -60,7 +64,7 @@ const AdminDashboard = () => {
 
     const deleteBid = async (id) => {
         try {
-            await axios.delete(`/admin/bids/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/bids/${id}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             fetchBids();
@@ -73,18 +77,46 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "/admin/bids",
-                { item, startingBid },
+                `${import.meta.env.VITE_API_URL}/api/admin/bids`,
+                { 
+                    title, 
+                    description, 
+                    category, 
+                    startingPrice, 
+                    currentPrice: startingPrice, 
+                    startTime, 
+                    endTime
+                    // seller is now automatically set to the authenticated admin user
+                },
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 }
             );
             setMessage("Bid uploaded successfully!");
-            setItem("");
-            setStartingBid("");
+            setTitle("");
+            setDescription("");
+            setCategory("Electronics");
+            setStartingPrice("");
+            setStartTime("");
+            setEndTime("");
             fetchBids(); // Refresh the bids list after a new bid is uploaded
         } catch (error) {
             setMessage("Failed to upload bid. Please try again.");
+        }
+    };
+
+    const clearAllBids = async () => {
+        if (window.confirm("⚠️ WARNING: This will delete ALL old bid data and start fresh with new format. Continue?")) {
+            try {
+                const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/bids/clear-all`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                setMessage(`✅ ${response.data.message}`);
+                fetchBids();
+            } catch (error) {
+                setMessage("❌ Failed to clear bids. Please try again.");
+                console.error("Error clearing bids:", error);
+            }
         }
     };
 
@@ -104,7 +136,7 @@ const AdminDashboard = () => {
 
     const editBid = async (id, updatedBid) => {
         try {
-            await axios.put(`/admin/bids/${id}`, updatedBid, {
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/bids/${id}`, updatedBid, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             fetchBids(); // Refresh the bids list after editing
@@ -118,6 +150,21 @@ const AdminDashboard = () => {
     return (
         <div>
             <h1>Admin Dashboard</h1>
+            
+            {/* Simple Admin Controls */}
+            <div style={{backgroundColor: '#f8f9fa', padding: '15px', margin: '20px 0', borderRadius: '8px'}}>
+                <h3>� Admin Controls</h3>
+                <button 
+                    onClick={clearAllBids}
+                    style={{backgroundColor: '#dc3545', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px', marginRight: '10px'}}
+                >
+                    �️ Clear All Old Data & Start Fresh
+                </button>
+                <p style={{margin: '10px 0', fontSize: '14px', color: '#666'}}>
+                    Use this to delete all old format data and start with clean new format only.
+                </p>
+            </div>
+
             <h2>Users</h2>
             <ul>
                 {Array.isArray(users) && users.length > 0 ? (
@@ -138,10 +185,12 @@ const AdminDashboard = () => {
                     <p>No ongoing bids</p>
                 ) : (
                     ongoing.map((bid) => (
-                        <li key={bid._id}>
-                            {bid.item} - ${bid.leading}
-                            <button onClick={() => deleteBid(bid._id)}>Delete</button>
-                            <button onClick={() => editBid(bid._id, { item: "Updated Item", startingBid: 100 })}>Edit</button>
+                        <li key={bid._id} style={{marginBottom: '10px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '5px'}}>
+                            <strong>{bid.title}</strong> - <span style={{color: 'green'}}>${bid.currentPrice}</span>
+                            <div style={{marginTop: '5px'}}>
+                                <button onClick={() => deleteBid(bid._id)} style={{backgroundColor: '#dc3545', color: 'white', marginRight: '5px', padding: '5px 10px', border: 'none', borderRadius: '3px'}}>Delete</button>
+                                <button onClick={() => editBid(bid._id, { title: bid.title, startingPrice: bid.startingPrice })} style={{backgroundColor: '#007bff', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '3px'}}>Edit</button>
+                            </div>
                         </li>
                     ))
                 )}
@@ -153,7 +202,7 @@ const AdminDashboard = () => {
                 ) : (
                     upcoming.map((bid) => (
                         <li key={bid._id}>
-                            {bid.item} - ${bid.leading}
+                            {bid.title} - ${bid.currentPrice}
                         </li>
                     ))
                 )}
@@ -164,8 +213,8 @@ const AdminDashboard = () => {
                     <p>No past bids</p>
                 ) : (
                     past.map((bid) => (
-                        <li key={bid._id}>
-                            {bid.item} - ${bid.leading}
+                        <li key={bid._id} style={{marginBottom: '10px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '5px'}}>
+                            <strong>{bid.title}</strong> - <span style={{color: 'gray'}}>${bid.currentPrice}</span>
                         </li>
                     ))
                 )}
@@ -176,17 +225,58 @@ const AdminDashboard = () => {
                     <label>Item Name:</label>
                     <input
                         type="text"
-                        value={item}
-                        onChange={(e) => setItem(e.target.value)}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         required
                     />
                 </div>
                 <div>
-                    <label>Starting Bid:</label>
+                    <label>Description:</label>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Category:</label>
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value="Electronics">Electronics</option>
+                        <option value="Antiques">Antiques</option>
+                        <option value="Art">Art</option>
+                        <option value="vehicles">Vehicles</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Starting Price:</label>
                     <input
                         type="number"
-                        value={startingBid}
-                        onChange={(e) => setStartingBid(e.target.value)}
+                        value={startingPrice}
+                        onChange={(e) => setStartingPrice(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Start Time:</label>
+                    <input
+                        type="datetime-local"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>End Time:</label>
+                    <input
+                        type="datetime-local"
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
                         required
                     />
                 </div>
