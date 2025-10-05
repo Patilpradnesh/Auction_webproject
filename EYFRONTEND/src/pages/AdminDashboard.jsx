@@ -85,8 +85,8 @@ const AdminDashboard = () => {
                     startingPrice, 
                     currentPrice: startingPrice, 
                     startTime, 
-                    endTime, 
-                    seller: localStorage.getItem("userId") || "defaultSellerId" 
+                    endTime
+                    // seller is now automatically set to the authenticated admin user
                 },
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

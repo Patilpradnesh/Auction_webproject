@@ -25,10 +25,14 @@ exports.deleteUser = async (req, res) => {
 // Get all bids
 exports.getAllBids = async (req, res) => {
   try {
+    console.log("🔍 getAllBids called");
+    console.log("Request headers:", req.headers.authorization);
     const bids = await Bid.find();
+    console.log("✅ Found bids:", bids.length);
     res.status(200).json(bids);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching bids" });
+    console.error("❌ Error in getAllBids:", error);
+    res.status(500).json({ message: "Error fetching bids: " + error.message });
   }
 };
 
@@ -46,7 +50,16 @@ exports.deleteBid = async (req, res) => {
 // Upload new bid
 exports.uploadBid = async (req, res) => {
   try {
-    const { title, description, category, startingPrice, currentPrice, startTime, endTime, seller } = req.body;
+    console.log("🔍 uploadBid called");
+    console.log("Request body:", req.body);
+    
+    const { title, description, category, startingPrice, currentPrice, startTime, endTime } = req.body;
+    
+    // Use the current admin user as the seller
+    const seller = req.userId; // This comes from the auth middleware
+    
+    console.log("Extracted fields:", { title, description, category, startingPrice, currentPrice, startTime, endTime, seller });
+    
     const newBid = new Bid({ 
       title, 
       description, 
@@ -57,10 +70,15 @@ exports.uploadBid = async (req, res) => {
       endTime, 
       seller 
     });
+    
+    console.log("Created bid object:", newBid);
     await newBid.save();
+    console.log("✅ Bid saved successfully");
+    
     res.status(201).json({ message: "Bid uploaded successfully", bid: newBid });
   } catch (error) {
-    res.status(500).json({ message: "Error uploading bid" });
+    console.error("❌ Error in uploadBid:", error);
+    res.status(500).json({ message: "Error uploading bid: " + error.message });
   }
 };
 
