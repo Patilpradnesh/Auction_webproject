@@ -27,8 +27,9 @@ export const Contact = () => {
   };
 
   return (
-    <div className="container py-4 py-md-5 pt-28">
-      <div className="row justify-content-center">
+    <div className="min-h-screen bg-slate-50 pt-28">
+      <div className="container py-4 py-md-5">
+        <div className="row justify-content-center">
         <div className="col-12 col-lg-10 col-xl-8">
           <div className="text-center mb-4 mb-md-5">
             <h1 className="display-5 display-md-4 fw-bold mb-3">Contact Us</h1>
@@ -149,6 +150,7 @@ export const Contact = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

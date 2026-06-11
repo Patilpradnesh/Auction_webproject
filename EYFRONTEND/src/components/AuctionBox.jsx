@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function AuctionBox({ id, status, title, price, timeLeft, imageUrl }) {
+export default function AuctionBox({ id, status, title, price, timeLeft, imageUrl, linkToDashboard = false }) {
   const navigate = useNavigate();
 
   const statusStyles = {
@@ -23,8 +23,11 @@ export default function AuctionBox({ id, status, title, price, timeLeft, imageUr
   };
 
   const handleButtonClick = () => {
-    // Allow viewing details for all statuses
-    navigate(`/AuctionDetails/${id}`);
+    if (linkToDashboard) {
+      navigate('/Dashboard');
+    } else {
+      navigate(`/AuctionDetails/${id}`);
+    }
   };
 
   return (

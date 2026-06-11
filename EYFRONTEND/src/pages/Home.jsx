@@ -15,8 +15,15 @@ const Home = () => {
       try {
         const response = await axios.get("/api/bids");
         if (response.data && response.data.data) {
-          // Limit to 6 latest items for the showcase
-          setAuctions(response.data.data.slice(0, 6));
+          const now = Date.now();
+          // Filter ONLY currently ongoing/live auctions
+          const liveAuctions = response.data.data.filter(auction => {
+             const start = new Date(auction.startTime).getTime();
+             const end = new Date(auction.endTime).getTime();
+             return now >= start && now < end;
+          });
+          // Limit to exactly 3 top live auctions
+          setAuctions(liveAuctions.slice(0, 3));
         }
       } catch (error) {
         console.error("Error fetching live auctions:", error);
@@ -85,6 +92,24 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Live Platform Stats Strip (Phase 3: Market Intelligence) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20">
+        <div className="glass-panel bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-slate-200/60 grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
+          <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+            <span className="text-4xl font-black text-primary mb-1">12,543</span>
+            <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Active Bidders</span>
+          </div>
+          <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+            <span className="text-4xl font-black text-success mb-1">245</span>
+            <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Live Auctions</span>
+          </div>
+          <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+            <span className="text-4xl font-black text-slate-900 mb-1">$1.2M+</span>
+            <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Total Volume</span>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="mb-8 text-center sm:text-left">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Featured Auctions</h2>
@@ -129,6 +154,7 @@ const Home = () => {
                   timeLeft={formatTimeLeft(auction)}
                   imageUrl={auction.images && auction.images[0] ? auction.images[0] : null}
                   id={auction._id}
+                  linkToDashboard={true}
                 />
               </div>
             ))}

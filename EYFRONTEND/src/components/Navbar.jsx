@@ -44,7 +44,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm py-1 transition-all duration-300">
+    <nav className="fixed w-full top-0 z-50 bg-white/60 backdrop-blur-md border-b border-white/50 shadow-sm py-1 transition-all duration-300 supports-[backdrop-filter]:bg-white/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
