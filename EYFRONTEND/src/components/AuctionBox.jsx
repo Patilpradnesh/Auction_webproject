@@ -6,17 +6,17 @@ export default function AuctionBox({ id, status, title, price, timeLeft, imageUr
 
   const statusStyles = {
     ongoing: { 
-      badgeBg: "bg-blue-500/10 text-blue-600 border border-blue-500/20", 
+      badgeBg: "bg-success/10 text-success border border-success/20", 
       badgeText: "Live Now",
-      btnClass: "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20",
+      btnClass: "bg-slate-900 hover:bg-slate-800 text-white shadow-md hover:-translate-y-0.5",
     },
     upcoming: {
-      badgeBg: "bg-amber-500/10 text-amber-600 border border-amber-500/20", 
+      badgeBg: "bg-warning/10 text-warning border border-warning/20", 
       badgeText: "Coming Soon",
-      btnClass: "bg-amber-100 text-amber-700 hover:bg-amber-200 shadow-sm",
+      btnClass: "bg-slate-100 text-slate-700 hover:bg-slate-200 shadow-sm",
     },
     sold: { 
-      badgeBg: "bg-slate-500/10 text-slate-600 border border-slate-500/20", 
+      badgeBg: "bg-neutral/10 text-neutral border border-neutral/20", 
       badgeText: "Sold",
       btnClass: "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50",
     }
@@ -53,33 +53,37 @@ export default function AuctionBox({ id, status, title, price, timeLeft, imageUr
         </div>
       </div>
 
-      <div className="p-6 flex flex-col flex-grow">
-        <h3 className="font-display font-bold text-xl text-slate-900 mb-4 line-clamp-1 group-hover:text-blue-600 transition-colors">
-          {title}
-        </h3>
+      <div className="p-6 flex flex-col flex-grow bg-white">
         
-        <div className="flex justify-between items-end mb-6 flex-grow">
+        {/* Psychological Priority 1: Financial State & Urgency */}
+        <div className="flex justify-between items-end mb-3 flex-grow">
           <div>
-            <span className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+            <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
               {status === "sold" ? "Sold Price" : status === "ongoing" ? "Current Bid" : "Starting Bid"}
             </span>
-            <span className="block text-2xl font-bold text-slate-900">
+            <span className="block text-3xl font-black text-slate-900 tracking-tight">
               {price}
             </span>
           </div>
           
           <div className="text-right">
-            <span className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+            <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
               {status === "sold" ? "Sold On" : status === "ongoing" ? "Time Left" : "Starts In"}
             </span>
-            <span className={`block font-bold ${status === "ongoing" ? "text-red-500 animate-pulse" : "text-slate-700"}`}>
+            <span className={`block text-lg font-bold tracking-tight ${status === "ongoing" ? "text-danger animate-pulse" : "text-slate-700"}`}>
               {timeLeft}
             </span>
           </div>
         </div>
 
+        {/* Psychological Priority 2: Product Context */}
+        <h3 className="font-display font-medium text-sm text-slate-600 mb-6 line-clamp-1 group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+
+        {/* Psychological Priority 3: Clear Action */}
         <button 
-          className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 ${statusStyles[status].btnClass} cursor-pointer`}
+          className={`w-full py-3 px-4 rounded-xl font-bold tracking-wide uppercase text-sm transition-all duration-200 ${statusStyles[status].btnClass} cursor-pointer hover:shadow-lg`}
           onClick={handleButtonClick}
         >
           {status === "sold" ? "View Results" : status === "ongoing" ? "Place Bid Now" : "View Preview"}
