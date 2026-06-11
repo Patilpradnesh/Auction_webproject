@@ -1,32 +1,40 @@
 const express = require("express");
-const { isAdmin } = require("../middleware/authMiddleware");
-const adminController = require("../controllers/adminController"); // Ensure this path is correct
+const { verifyAuth, isAdmin } = require("../middleware/authMiddleware");
+const adminController = require("../controllers/adminController"); 
+const upload = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 
+// Apply auth verify first, then check admin for ALL admin routes
+router.use(verifyAuth, isAdmin);
+
 // Get all users (admin only)
-router.get("/users", isAdmin, adminController.getAllUsers);
+router.get("/users", adminController.getAllUsers);
 
 // Delete a user (admin only)
-router.delete("/users/:id", isAdmin, adminController.deleteUser);
+router.delete("/users/:id", adminController.deleteUser);
 
 // Get all bids (admin only)
-router.get("/bids", isAdmin, adminController.getAllBids);
+router.get("/bids", adminController.getAllBids);
 
-// Clear all bids (admin only) - MUST come BEFORE /bids/:id route
-router.delete("/bids/clear-all", isAdmin, adminController.clearAllBids);
+// Clear all bids (admin only)
+router.delete("/bids/clear-all", adminController.clearAllBids);
 
 // Delete a bid (admin only)
-router.delete("/bids/:id", isAdmin, adminController.deleteBid);
+router.delete("/bids/:id", adminController.deleteBid);
 
-// Create/Upload new bid (admin only)
-router.post("/bids", isAdmin, adminController.uploadBid);
+// Create/Upload new bid (admin only) - Handles image file upload
+router.post("/bids", upload.single("image"), adminController.uploadBid);
 
-// Edit existing bid (admin only)
-router.put("/bids/:id", isAdmin, adminController.editBid); // Temporarily removed auth for testing
+router.put("/bids/:id", adminController.editBid); 
 
-// Admin dashboard
-router.get("/dashboard", isAdmin, (req, res) => {
+router.get("/analytics", adminController.getAnalytics);
+
+router.get("/search/users", adminController.searchUsers);
+
+router.get("/search/bids", adminController.searchBids);
+
+router.get("/dashboard", (req, res) => {
   res.status(200).json({ status: "success", message: "Welcome to the admin dashboard" });
 });
 

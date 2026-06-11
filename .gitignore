@@ -27,3 +27,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 .history/
+
+*.zip
+EYBACKEND/uploads/
+scratch_reset_admin.js

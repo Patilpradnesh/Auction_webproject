@@ -1,0 +1,73 @@
+# =============================================
+# Auction Platform — Local Dev Environment
+# =============================================
+# Usage:
+#   Start all:  docker compose up -d
+#   Stop all:   docker compose down
+#   Logs:       docker compose logs -f
+# =============================================
+
+version: '3.9'
+
+services:
+
+  # ─── MongoDB (local alternative to Atlas) ───
+  mongodb:
+    image: mongo:7
+    container_name: auction_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret123
+      MONGO_INITDB_DATABASE: auction
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - auction_network
+
+  # ─── Mongo Express (Visual DB Browser) ──────
+  # Access at: http://localhost:8081
+  # Username: admin | Password: secret123
+  mongo-express:
+    image: mongo-express:latest
+    container_name: auction_mongo_express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: secret123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:secret123@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: secret123
+    depends_on:
+      - mongodb
+    networks:
+      - auction_network
+
+  # ─── Redis (for Phase 2: bidding engine) ────
+  redis:
+    image: redis:7-alpine
+    container_name: auction_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - auction_network
+
+# ─── Named Volumes (data persists between restarts) ───
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# ─── Network ────────────────────────────────────────
+networks:
+  auction_network:
+    driver: bridge

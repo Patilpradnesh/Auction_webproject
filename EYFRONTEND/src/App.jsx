@@ -1,4 +1,6 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import Home from "./pages/Home";
 import AuctionDetails from "./pages/AuctionDetails";
 import Dashboard from "./pages/Dashboard";
@@ -9,40 +11,38 @@ import About from "./pages/About";
 import AdminDashboard from "./pages/AdminDashboard";
 import SignIn from "./pages/SignIn";
 import AdminRegister from "./pages/AdminRegister";
-
+import Help from "./pages/Help";
 import ErrorPage from "./pages/ErrorPage";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/responsive.css";
 import { Contact } from "./pages/Contact";
-
-// Function to check authentication status
-const isAuthenticated = () =>
-  localStorage.getItem("isAuthenticated") === "true";
-const isAdmin = () => localStorage.getItem("isAdmin") === "true";
+import "./styles/responsive.css";
 
 // Private Route Component
 const PrivateRoute = ({ element }) => {
-  return isAuthenticated() ? element : <Navigate to="/SignIn" />;
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return null;
+  return isAuthenticated ? element : <Navigate to="/SignIn" />;
 };
 
 const AdminRoute = ({ element }) => {
-  return isAuthenticated() && isAdmin() ? element : <Navigate to="/SignIn" />;
+  const { isAuthenticated, user, loading } = useAuth();
+  if (loading) return null;
+  const isAdmin = user?.role?.toLowerCase() === "admin";
+  return isAuthenticated && isAdmin ? element : <Navigate to="/SignIn" />;
 };
 
 function App() {
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-200">
       <Navbar />
-      <main className="flex-grow-1">
+      <main className="flex-grow">
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Home />} />{" "}
-          {/* Ensure this renders the Home component */}
+          <Route path="/" element={<Home />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/help" element={<Help />} />
           <Route path="/admin-register" element={<AdminRegister />} />
           <Route path="/*" element={<ErrorPage />} />
           {/* Admin Routes */}
@@ -56,7 +56,7 @@ function App() {
             element={<PrivateRoute element={<Dashboard />} />}
           />
           <Route
-            path="/AuctionDetails"
+            path="/AuctionDetails/:id"
             element={<PrivateRoute element={<AuctionDetails />} />}
           />
         </Routes>

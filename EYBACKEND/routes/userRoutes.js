@@ -1,27 +1,47 @@
 const express = require("express");
 const { body } = require("express-validator");
-const userController = require("../controllers/userController");
+const {
+  getAllUsers,
+  registerUser,
+  loginUser,
+  logoutUser,
+  deleteUser,
+  getUserProfile,
+  getUserBidHistory,
+} = require("../controllers/userController");
+const { verifyAuth, requireAdmin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Get all users
-router.get("/", userController.getAllUsers);
-
-// Register a new user
+// Auth
 router.post(
-  "/register",
+  "/auth/register",
   [
-    body("username").notEmpty().withMessage("Name is required"),
-    body("email").isEmail().withMessage("Valid email is required"),
-    body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+    body("username").trim().notEmpty().withMessage("Username required"),
+    body("email").isEmail().withMessage("Valid email required"),
+    body("password").isLength({ min: 8 }).withMessage("Password min 8 chars"),
   ],
-  userController.registerUser
+  
+  registerUser
 );
 
-// Login user
-router.post("/login", userController.loginUser);
+router.post(
+  "/auth/login",
+  [
+    body("email").isEmail().withMessage("Valid email required"),
+    body("password").notEmpty().withMessage("Password required"),
+  ],
+  loginUser
+);
 
-// Delete a user by ID
-router.delete("/:id", userController.deleteUser);
+router.post("/auth/logout", logoutUser);
+
+// Current user (token-based)
+router.get("/users/me", verifyAuth, getUserProfile);
+router.get("/users/me/bids", verifyAuth, getUserBidHistory);
+
+// Admin-only
+router.get("/users", verifyAuth, requireAdmin, getAllUsers);
+router.delete("/users/:id", verifyAuth, requireAdmin, deleteUser);
 
 module.exports = router;

@@ -2,16 +2,24 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const path = require("path");
 
 const userRoutes = require("./routes/userRoutes");
 const bidRoutes = require("./routes/bidRoutes");
-const adminRoutes = require("./routes/adminRoutes"); 
-const User = require("./models/User");
+const adminRoutes = require("./routes/adminRoutes");
+
+const http = require("http");
+const { initializeSocket } = require("./socket/socketSetup");
+const { connectRedis } = require("./redis/redisClient");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+
+// Initialize Socket.io
+initializeSocket(server);
+
+const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -21,106 +29,61 @@ if (!MONGO_URI) {
 
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log("MongoDB Connected Successfully"))
-  .catch((err) => console.error("MongoDB Connection Error:", err));
+  .then(() => console.log("✅ MongoDB Connected Successfully"))
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Error (Please whitelist your IP in Atlas):", err.message);
+  });
 
-// var corsOption ={
-//   origin:[
-//     'http://localhost:3000'
-//   ],
-//   methods:"GET,POST,PUT,DELETE,PATCH,HEAD",
-//   credentials:true,
-//   optionsSuccessStatus:200
-// }
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://auction-webproject-3.onrender.com"
+];
 
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = "The CORS policy for this site does not allow access from the specified origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+}));
+
+app.use(cookieParser());
 app.use(express.json());
 
-// Home route
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to the Auction Platform</h1>");
 });
 
-// Mount routes
-app.use("/api/users", userRoutes);
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+app.use("/api", userRoutes);
 app.use("/api/bids", bidRoutes);
 app.use("/api/admin", adminRoutes);
 
-// Direct registration endpoint for frontend compatibility
-
-// app.post("/register", async (req, res) => {
-//   const { username, email, password } = req.body;
-  
-//   try {
-//     // Check if user already exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ 
-//         status: "error", 
-//         message: "User already exists with this email" 
-//       });
-//     }
-
-//     // Hash password
-//     const hashedPassword = await bcrypt.hash(password, 12);
-    
-//     // Create new user
-//     const newUser = new User({ 
-//       name: username, // Frontend sends 'username', we store it as 'name'
-//       email, 
-//       password: hashedPassword,
-//       role: "user" // Default role
-//  });
-    
-//     await newUser.save();
-
-//     res.status(201).json({ 
-//       alert: "from index.js file ",
-//       status: "success", 
-//       message: "User registered successfully",
-//       user: {
-//         id: newUser._id,
-//         name: newUser.name,
-//         email: newUser.email,
-//         role: newUser.role
-//       }
-//     });
-//   } catch (error) {
-//     console.error("Registration error:", error);
-//     res.status(500).json({ 
-//       status: "error", 
-//       message: "Server error during registration" 
-//     });
-//   }
-// });
-
-// app.post("/login", async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     const user = await User.findOne({ email });
-//     if (!user || !(await bcrypt.compare(password, user.password))) {
-//       return res.status(400).json({ message: "Invalid credentials" });
-//     }
-
-//     const token = jwt.sign(
-//       { id: user._id, role: user.role },
-//       process.env.JWT_SECRET,
-//       { expiresIn: "1h" }
-//     );
-
-//     // Ensure the full name is included in the response
-//     res.status(200).json({ role: user.role, token, name: user.name });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
-
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(err.status || 500).json({ message: err.message || "Internal Server Error" });
 });
 
-app.listen(PORT, () => {
+// Start Server and Redis
+server.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  
+  try {
+    await connectRedis();
+  } catch (redisError) {
+    console.error("Failed to connect to Redis on startup:", redisError.message);
+  }
 });
+
+// trigger restart

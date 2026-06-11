@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {useNavigate } from "react-router-dom";
-const URI =`${import.meta.env.VITE_API_URL}/api/users/register`;
+const URI =`${import.meta.env.VITE_API_URL}/api/auth/register`;
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,99 +51,106 @@ const SignUp = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light py-4">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-            <div className="card shadow-lg border-0 rounded-3">
-              <div className="card-body p-4 p-md-5">
-                <h3 className="text-center mb-4 h4 h-md-3">Sign Up for AuctionPro</h3>
-                {error && <div className="alert alert-danger small">{error}</div>}
-                {success && <div className="alert alert-success small">{success}</div>}
-                <form onSubmit={handleSubmit}>
-                  {/* Name Input */}
-                  <div className="mb-3">
-                    <label htmlFor="name" className="form-label fw-medium">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      id="name"
-                      placeholder="Enter your full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </div>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Decorative background blobs */}
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
 
-                  {/* Email Input */}
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label fw-medium">
-                      Email address
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control form-control-lg"
-                      id="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
+      <div className="max-w-md w-full space-y-8 relative z-10">
+        <div className="glass-panel p-10 rounded-3xl bg-white/60 backdrop-blur-xl shadow-2xl ring-1 ring-white/50 border border-slate-100">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Create Account</h2>
+            <p className="text-sm text-slate-500 font-medium">Join AuctionPro today</p>
+          </div>
 
-                  {/* Password Input */}
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label fw-medium">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control form-control-lg"
-                      id="password"
-                      placeholder="Enter a strong password (min 6 characters)"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength="6"
-                    />
-                  </div>
-
-                  {/* Confirm Password Input */}
-                  <div className="mb-4">
-                    <label htmlFor="confirmPassword" className="form-label fw-medium">
-                      Confirm Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control form-control-lg"
-                      id="confirmPassword"
-                      placeholder="Re-enter your password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button type="submit" className="btn btn-primary btn-lg w-100 mb-3">
-                    <i className="fas fa-user-plus me-2"></i>
-                    Sign Up
-                  </button>
-                </form>
-
-                {/* Already Have an Account? */}
-                <div className="text-center">
-                  <p className="mb-0 small">
-                    Already have an account?{" "}
-                    <a href="/signin" className="text-decoration-none fw-medium">
-                      Sign In
-                    </a>
-                  </p>
-                </div>
-              </div>
+          {error && (
+            <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-sm font-medium text-center shadow-sm">
+              {error}
             </div>
+          )}
+          {success && (
+            <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm font-medium text-center shadow-sm">
+              {success}
+            </div>
+          )}
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="name" className="block text-sm font-bold text-slate-700 mb-2">
+                Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                required
+                className="block w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm sm:text-sm"
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-bold text-slate-700 mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                className="block w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm sm:text-sm"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-bold text-slate-700 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                minLength="6"
+                className="block w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm sm:text-sm"
+                placeholder="Min. 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-bold text-slate-700 mb-2">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                required
+                className="block w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm sm:text-sm"
+                placeholder="Re-enter password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all active:scale-[0.98] mt-2"
+            >
+              Sign Up
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-slate-200/60 flex flex-col items-center justify-center">
+            <p className="text-sm text-slate-500">
+              Already have an account?{" "}
+              <a href="/SignIn" className="font-bold text-blue-600 hover:text-blue-500 transition-colors">
+                Sign In
+              </a>
+            </p>
           </div>
         </div>
       </div>
