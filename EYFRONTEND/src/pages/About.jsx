@@ -4,7 +4,7 @@ import React from 'react'
 export default function About() {
 return (
     <>
-        <div className="container py-4 py-md-5">
+        <div className="container py-4 py-md-5 pt-28">
             <div className="row justify-content-center">
                 <div className="col-12 col-lg-10 col-xl-8">
                     <div className="text-center mb-4 mb-md-5">
