@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -7,6 +7,15 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -35,7 +44,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="glass-navbar transition-all duration-300">
+    <nav className="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm py-1 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
@@ -65,8 +74,31 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Desktop Right Section (Auth) */}
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Desktop Right Section (Tools & Auth) */}
+          <div className="hidden md:flex items-center space-x-6">
+            
+            {/* Search Toggle */}
+            <button className="text-slate-500 hover:text-primary transition-colors p-1">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+
+            {/* Notification Center */}
+            {isAuthenticated && (
+              <button className="text-slate-500 hover:text-primary transition-colors p-1 relative">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                {/* Unread indicator */}
+                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-danger ring-2 ring-white"></span>
+              </button>
+            )}
+
+            {/* Divider */}
+            <div className="h-6 w-px bg-slate-200"></div>
+
+            {/* Auth Section */}
             {isAuthenticated && user ? (
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-slate-600">
@@ -74,7 +106,7 @@ const Navbar = () => {
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-red-600 transition-colors shadow-sm"
+                  className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-danger transition-colors shadow-sm"
                 >
                   Logout
                 </button>
@@ -83,13 +115,13 @@ const Navbar = () => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/SignIn"
-                  className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-primary transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/SignUp"
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all hover:-translate-y-0.5"
+                  className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover shadow-md transition-all hover:-translate-y-0.5"
                 >
                   Get Started
                 </Link>

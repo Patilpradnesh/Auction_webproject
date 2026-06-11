@@ -143,7 +143,7 @@ const AuctionDetails = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-10 pb-20">
+    <div className="min-h-screen bg-slate-50 pt-28 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8 flex items-center text-sm font-medium text-slate-500">

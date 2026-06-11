@@ -49,7 +49,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-transparent py-10">
+    <div className="min-h-screen bg-transparent pt-28 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header & User Profile */}

@@ -159,7 +159,7 @@ const AdminDashboard = () => {
     const { ongoing, upcoming, past } = categorizeBids(bids);
 
     return (
-        <div className="min-h-screen flex flex-col items-center bg-slate-50 py-10 pb-20">
+        <div className="min-h-screen flex flex-col items-center bg-slate-50 pt-28 pb-20">
             <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
                 
                 {/* Header */}
